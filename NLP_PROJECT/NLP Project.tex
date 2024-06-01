@@ -1,0 +1,284 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+
+\title{Insight into Affective Responses on Social Media: CAREdb for Improved Post Ranking}
+\author{\IEEEauthorblockN{AHSAN ALI KHAN REG No 429834, M RAMZAN NIAZ REG No 401629}
+\IEEEauthorblockA{Department of Computing (DoC), School of Electrical Engineering and Computer Science (SEECS), NUST\\
+Islamabad\\
+Email: ahsan.msai22seecs@seecs.nust.edu.pk}}
+\maketitle
+
+\begin{abstract}
+The paper introduces the Common Affective Response Expression (CARE) method, which leverages patterns and keyword-affect mapping in comments to obtain labels for affective response of viewers to social media posts. The dataset called CAREdb, containing 230k social media post annotations according to seven affective responses, using the CARE method. The CAREdb dataset is shown to be comparable in quality to human annotations. The paper demonstrates the utility of CAREdb by training BERT-based models for affective response prediction and emotion detection. The CARE method and CAREdb dataset provide a cost-effective and scalable way to obtain training data for designing effective ranking functions for social media posts and related task
+\end{abstract}
+
+\section{Introduction}
+Social media has become a prominent platform for communication and entertainment consumption, and effective ranking functions are necessary to optimize user experience. These algorithms determine the order in which posts are displayed on a user's feed, with higher-ranked posts being more likely to receive engagement. Understanding affective responses is crucial in gauging user engagement and preferences on social media.
+
+Traditional human annotation approaches for recognizing affective responses have limitations in terms of time, resources, subjectivity, and scalability. CAREdb is introduced as a dataset that leverages the Common Affective Response Expression (CARE) method, providing a more efficient and scalable solution by analyzing the signal present in comments that are posted in response to a post. CAREdb eliminates the need for extensive human annotation, reduces biases, and allows for scalability to new affective responses or evolving social media trends.
+
+The predictive power of CAREdb can be harnessed to gain insights into user engagement on social media. By understanding which types of posts evoke positive affective responses, such as joy or inspiration, content creators and marketers can tailor their strategies to create more engaging and shareable content. On the other hand, identifying posts that trigger negative affective responses, such as anger or disgust, can help identify potential issues or controversies that may impact a brand's reputation or user engagement.
+
+By leveraging the insights from CAREdb, social media platforms can optimize their ranking functions to prioritize posts that are more likely to generate positive affective responses and enhance user experience. CAREdb has the potential to provide valuable insights into user engagement on social media, enabling content creators, marketers, and social media platforms to optimize their strategies and enhance user experience.
+
+\section{Literature Review}
+
+Emotion recognition and analysis from text data has gained significant attention in recent years due to the increasing availability of large-scale text data from various sources such as social media, online forums, and news articles. Emotions are a fundamental aspect of human communication and understanding them from text data can provide valuable insights into human behavior, sentiment, and affective responses in different contexts. In this literature review, we summarize and analyze 10 relevant research articles that contribute to the field of emotion recognition and analysis from text data.
+
+The first article, "I-CARE: Intelligent Context Aware System for Recognizing Emotions from Text" by Douiji et al. [1], proposes a context-aware system for emotion recognition from text. The authors leverage machine learning techniques to extract context-aware features from text data, including syntactic and semantic features, to improve the accuracy of emotion recognition. The proposed system shows promising results in recognizing emotions from text data in various contexts.
+
+The second article, "Extraction of Emotions from Multilingual Text Using Intelligent Text Processing and Computational Linguistics" by Jain et al. [2], focuses on emotion extraction from multilingual text using intelligent text processing and computational linguistics techniques. The authors propose an approach that combines linguistic features, such as sentiment words and emotion-specific patterns, with machine learning algorithms to extract emotions from text data in multiple languages. The proposed approach demonstrates effective emotion extraction capabilities from multilingual text data.
+
+The third article, "Using Millions of Emoji Occurrences to Learn Any-domain Representations for Detecting Sentiment, Emotion and Sarcasm" by Felbo et al. [3], introduces a novel approach for learning domain-specific representations from emoji occurrences in large-scale text data. The authors leverage the use of emojis as proxies for emotions and sentiments to train deep learning models for detecting emotions, sentiment, and sarcasm in text data. The proposed approach shows promising results in learning domain-specific representations for emotion analysis from text data.
+
+The fourth article, "Context-Dependent Models for Predicting and Characterizing Facial Expressiveness" by Lin et al. [4], focuses on predicting facial expressiveness based on contextual information from text data. The authors propose a context-dependent model that combines textual features with facial expression features to predict and characterize facial expressiveness. The proposed model shows promising results in predicting facial expressiveness from text data in different contexts.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Fig 2 NLP.png}
+    \caption{ An example case of differing publisher affect
+and affective response. This work focuses on affective
+response through signals such as comments and reactions. Post image sourced from Shutterstock.}
+    \label{fig:1}
+\end{figure}
+The fifth article, "Repurposing Sentiment Analysis for Social Research Scopes: An Inquiry into Emotion Expression within Affective Publics on Twitter During the Covid-19 Emergency" by Rathnayake and Caliandro [5], explores the repurposing of sentiment analysis for emotion analysis in the context of the Covid-19 pandemic on Twitter. The authors propose a sentiment analysis approach that takes into account the emotions expressed within affective publics on Twitter during the pandemic. The proposed approach provides insights into the emotional expressions of users on Twitter during the Covid-19 emergency.
+
+The sixth article, "Emotion Driven Crisis Response: A Benchmark Setup for Multi-lingual Emotion Analysis in Disaster Situations" by Ahmad et al. [6], introduces a benchmark setup for multi-lingual emotion analysis in disaster situations. The authors propose a novel approach that leverages emotions expressed in social media data during disaster events for crisis response. The benchmark setup provides a valuable resource for evaluating emotion analysis models in the context of disaster situations.
+
+The seventh article, ""That's So Cute!": The CARE Dataset for Affective Response Detection" by Dwivedi-Yu and Halevy [7], introduces the CARE dataset, a valuable resource for detecting affective responses in text data. The authors propose a novel approach that combines emotion recognition with affective response detection to capture affective responses in text data.
+In recent years, there has been a growing interest in developing intelligent systems for recognizing emotions from text. Several studies have proposed novel approaches and techniques for emotion analysis in text data. For instance, Douiji et al. [1] proposed an Intelligent Context Aware System (I-CARE) for recognizing emotions from text. The system utilizes a combination of machine learning algorithms and lexical resources to accurately detect emotions from textual data. The authors demonstrate the effectiveness of their approach through experimental evaluations on a dataset of tweets, achieving promising results.
+
+Jain et al. [2] proposed an approach for extracting emotions from multilingual text using intelligent text processing and computational linguistics. The authors utilize natural language processing techniques, such as part-of-speech tagging and sentiment analysis, to extract emotions from text in multiple languages. Their approach is designed to be language-independent, making it suitable for analyzing emotions in text data from diverse sources and languages. Experimental results on a dataset of multilingual tweets demonstrate the effectiveness of their approach.
+
+In the realm of social media, Felbo et al. [3] proposed an innovative approach that leverages emoji occurrences to learn domain-specific representations for detecting sentiment, emotion, and sarcasm. The authors utilize a large dataset of tweets containing emoji and develop an emoji-based representation model that captures the underlying emotions associated with different emoji. Experimental results demonstrate that their approach outperforms traditional approaches that rely solely on textual content, highlighting the importance of incorporating emoji as a valuable source of emotion information in social media analysis.
+
+In the context of facial expressiveness, Lin et al. [4] proposed context-dependent models for predicting and characterizing facial expressiveness. The authors utilize a dataset of images of facial expressions collected in different contexts, such as social interactions and emotional elicitation tasks, and develop machine learning models that account for contextual factors to improve the accuracy of facial expressiveness prediction. Their approach shows promising results in predicting facial expressions in real-world contexts, which has implications for understanding human emotion expression in various social situations.
+
+Emotion analysis in the context of crisis response and disaster situations has also gained attention in recent years. Ahmad et al. [6] proposed a benchmark setup for multilingual emotion analysis in disaster situations. The authors develop a dataset of social media posts related to disaster events and propose a benchmark evaluation framework for emotion analysis in multiple languages. Their approach provides a valuable resource for researchers and practitioners to evaluate and compare different emotion analysis techniques in the context of crisis response.
+
+In addition to social media, emotion analysis in the context of fake news detection has also been explored. Hamed et al. [9] proposed a fake news detection model that leverages sentiment analysis of news content and emotion analysis of users' comments on social media. The authors utilize a combination of lexical and sentiment-based features to detect fake news, and incorporate emotion analysis of users' comments as an additional source of information. Experimental results demonstrate the effectiveness of their approach in detecting fake news, highlighting the potential of incorporating emotion analysis in fake news detection systems.
+
+Furthermore, depression detection in social media has also been investigated using affective and social norm features. Triantafyllopoulos et al. [10] proposed a model for detecting depression in social media posts by leveraging affective and social norm features. The authors develop a dataset of social media posts from individuals with and without depression and extract features related to affective content, social norms, and language style. Their approach shows promising results in detecting depression in social media posts, suggesting the potential of incorporating emotional and social factors in mental health screening using social media data.
+
+In conclusion, emotion analysis in text data has gained significant attention in recent years, with a growing body of research proposing novel approaches and techniques for detecting emotions from text. These studies have demonstrated the effectiveness of different approaches, ranging from lexical, resources and machine learning algorithms to context-aware models and leveraging emoji occurrences in social media. Emotion analysis has been explored in various domains, including social media, crisis response, fake news detection, and mental health screening, among others.
+
+However, there are still several challenges and opportunities for further research in this field. One challenge is the inherent subjectivity and complexity of emotions, which makes accurate emotion detection from text data a challenging task. Developing robust and reliable emotion analysis models that can capture the nuances and subtleties of human emotions remains an active area of research.
+
+Another challenge is the availability of labeled data for training emotion analysis models. Creating large and diverse labeled datasets for emotion analysis is time-consuming and costly, and often requires subjective annotation, which can introduce biases. Developing techniques to address the issue of limited labeled data and biases in emotion analysis is an important research direction.
+
+Furthermore, the cultural and contextual differences in emotions pose challenges in developing generalized emotion analysis models. Emotions can be expressed and perceived differently across cultures and contexts, and adapting emotion analysis models to different cultural and contextual settings is an area that requires further exploration.
+
+Ethical considerations are also important in emotion analysis research, as emotions are sensitive and personal information. Ensuring privacy and consent of individuals whose text data is used for emotion analysis, addressing potential biases and fairness issues, and transparently handling emotional data are critical aspects that need to be considered in emotion analysis research.
+
+Despite these challenges, emotion analysis in text data holds great potential for a wide range of applications, including sentiment analysis, personalized marketing, mental health screening, social media analysis, and crisis response, among others. With the continued advancement of natural language processing techniques, machine learning algorithms, and access to diverse data sources, emotion analysis is likely to continue to evolve and contribute to various fields in the future.
+
+\section{Methodology}
+
+\subsection{The CARE Method}
+
+In this section, we present a formal description of the CARE (Content Affective Response Extraction) method for annotating the affective response of posts. CARE aims to understand the emotional and cognitive experience that users have when they encounter a piece of content. We acknowledge that affective responses are highly personal, but our goal is to predict whether a piece of content is generally likely to elicit a particular affective response. Additionally, we discuss the components of CARE, including CARE patterns and the CARE lexicon, which are used for extracting information from comments and mapping them to specific affective responses.
+
+\subsection{CARE Patterns and the CARE Lexicon}
+
+The CARE method consists of two major components: CARE patterns and the CARE lexicon. CARE patterns are regular expressions used to extract information from comments, while the CARE lexicon is a keyword-affect dictionary used to map comments to specific affects.
+
+CARE patterns are designed to capture common structures present in comments that indicate affective responses. They rely on two sets of sub-patterns: exaggerators (words that intensify or exaggerate a statement) and indicators (words that exist in the CARE lexicon and map to a particular affect).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Fig 1 NLP.png}
+    \caption{Overview of the CARE Method. The top half of the figure
+(steps 1–3) shows how the affective response to a post
+is computed by aggregating the expressed affects in
+comments from users viewing the post. The bottom
+half of the figure (steps A–C) shows how we expand the
+collection of CARE patterns and the lexicon based on
+labels that have been obtained from prior iterations.}
+    \label{fig:2}
+\end{figure}
+The initial set of CARE patterns was seeded with six patterns, and an additional 17 patterns were automatically discovered using an expansion method. Examples of CARE patterns include demonstrative pronouns, subjective self pronouns, subjective non-self pronouns, collective nouns, leading exaggerators, and exclamatory interrogatives.
+
+The CARE lexicon contains 163 indicators for the seven classes of affects considered in the method. These classes include excited, angered, saddened, scared, adoring, amused, and approving. The lexicon provides definitions and examples for each affect, allowing comments to be mapped to specific affective responses
+
+\subsection{Labeling Posts}
+
+In this subsection, we describe how to combine CARE patterns and the lexicon at the comment level to annotate the affective response of a post. The process is illustrated in steps 1-3 of Figure 1 and detailed in Appendix, Algorithm 1.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{nlppredict.png}
+    \caption{Model Prediction}
+    \label{fig:picture}
+\end{figure}
+To begin, we apply regular expression matching using CARE patterns to individual sentences within the comments. If a sentence contains words like ``but'' or ``however,'' indicating a shift in sentiment, we truncate the front half as the latter half usually represents the predominant sentiment. We also exclude indicators that contain negation words like ``never,'' ``not,'' or ``cannot'' (although these could potentially be mapped to the opposite affective response).
+
+Once we have the matches from the CARE patterns, we utilize the lexicon to map the indicators to the corresponding affective responses. It is important to note that the expressed affects of the comments should align with the affective responses of the post. To obtain post-level affective response labels, we aggregate the comment-level labels and filter out labels with support smaller than a threshold value, denoted as ``t.'' Specifically, a post is labeled with a particular affective response if at least ``t'' comments were labeled with that response. In our experiments, we set the threshold value to 5 after qualitative inspection of CAREdb.
+
+It is possible for a comment to be labeled with multiple classes if it contains multiple indicators. Emotions are often not mutually exclusive, and an individual may experience multiple affective responses simultaneously.
+
+\subsection{Expanding CARE Patterns/Lexicon}
+
+Initially, we seeded the CARE patterns and lexicon with a small intuitive set. To expand them further, we analyzed common n-grams that appeared across posts with the same labels. This expansion process is depicted in steps A-C of Figure 1.
+
+For a given affect, we considered the set of comments (comm(a)) from posts labeled with that affect but not matching any CARE pattern. From these comments, we extracted new keywords by identifying the most frequent n-grams in comm(a) that were infrequent in comm(b), where b includes all classes except a. These new keywords were added to the CARE lexicon.
+
+Conversely, we converted the most common n-grams that co-occurred with multiple classes into regular expressions and added them as new CARE patterns. The expansion process continued iteratively until we had sufficient data to train our models. After two expansion rounds, the number of patterns increased from 6 to 23, and the number of indicators increased from 40 to 163.
+
+By expanding the CARE patterns and lexicon, we improved the coverage and accuracy of the CARE method, enhancing its ability to predict affective responses.
+
+\section{Results}
+In this section, we present the results of evaluating CAREdb, our method for annotating social media posts using CARE patterns and the CARE lexicon. We conducted human evaluation using Amazon Mechanical Turk (AMT) to validate the labels predicted by CARE. Additionally, we explored the possibility of using a state-of-the-art (SOTA) publisher-affect classifier, called GoEmotions, to label the comments instead of relying on CARE patterns/lexicon.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{results-1 NLP.png}
+    \caption{Table-1: Definition of affective responses (AR), examples of comments which would map to each affective response,
+and the number of posts (in thousands) per class in CAREdb}
+    \label{fig:3}
+\end{figure}
+\subsection{Human Evaluation}
+For human evaluation, we randomly selected 6,000 posts from CAREdb, ensuring a balanced distribution of at least 500 samples from each class. We asked AMT annotators, specifically those who qualified as AMT Masters with a lifetime approval rating greater than 80 percent, to label the affective response of each post. Annotators were encouraged to select multiple labels if appropriate, and they could also choose "None of the above" if necessary. In addition to the post, annotators were provided with up to 10 sampled comments from the post to provide more context. Each post was shown to three distinct annotators.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{results-2 NLP.png}
+    \caption{Table-1: The rate of agreement between the annotators
+and the labels proposed by CARE. The first column
+specifies the number of annotators to be used for consensus. The rest of the columns shows for all posts, the
+average rate of intersection of the human labels with at
+least one CARE label, all CARE labels, and any label
+that is not a CARE label}
+    \label{fig:4}
+\end{figure}
+We obtained an average Fleiss' kappa score of 0.59, indicating moderate agreement among the annotators. The agreement between the annotators and the labels proposed by the CARE method was high. Approximately 94 percent of posts had at least one label proposed by CARE that was confirmed by two or more annotators, and 90 percent of posts had all the labels confirmed. The agreement among annotators on labels not suggested by CARE (i.e., "Other") was 53 percent when confirmed by two or more annotators. On average, each post received around 1.8 labels per annotation.
+
+\subsection{Error Analysis}
+We analyzed the errors in CARE's predictions and found that the accuracy of CARE varied by class. In particular, the accuracy was lower for the classes "amused" and "excited." We observed non-trivial overlap among the classes "amused," "excited," and "approving," as indicated by interclass Spearman correlations and a two-dimensional projection of the labeled comments' embeddings. To identify the patterns or indicator matches responsible for these errors, we investigated precision and recall at the pattern and lexicon level. We discovered that certain pattern and keyword combinations provided a weaker signal for some classes, such as "amused." As a result, we plan to exclude specific combinations and implement different thresholds for each class in future iterations of CARE.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{results-3 NLP.png}
+    \caption{Precision versus recall of each class using
+varying thresholds (t = 0 to 9). Ground truth labels
+utilized are those which have at least 2 out of 3 annotator
+agreement. For clarity, only odd values of t are labeled}
+    \label{fig:5}
+\end{figure}
+\subsection{Leveraging Emotion Classification}
+We explored the possibility of using the GoEmotions classifier, a SOTA emotion classifier, to label the publisher affect of comments instead of using CARE patterns/lexicon. We developed a modified version of CARE, called CAREG, where the first two steps were replaced with labels from the GoEmotions classifier. We applied CAREG to our human-annotated dataset and compared its performance with CARE.
+
+The results showed that CARE outperformed CAREG in terms of annotator agreement. CAREG had a relative decrease of 12.9 and 18.0 percent in the rate of annotator agreement with any and all labels, respectively, compared to CARE. These decreases were consistent across individual classes as well. The lower performance of CAREG can be attributed to the low F1-scores (<0.4) of the GoEmotions classifier for nearly half of the classes. Furthermore, CARE patterns and the lexicon have the advantage of not requiring human-annotated data, unlike GoEmotions.
+
+To validate the mapping between GoEmotions and the CARE taxonomy, we applied CARE's first two steps to the GoEmotions dataset and computed the rate of agreement between the labels. The overall rate of agreement was high at 87.3percent. It is important to note that the mapping was done at the publisher affect level, as affective response and publisher affect labels do not always align. Further experiments indicated that affective response and publisher affect labels intersect only 44percent of the time.
+
+\section{Discussion}
+The results of our evaluation provide valuable insights into the performance and potential improvements of CAREdb, a method for annotating social media posts using CARE patterns and the CARE lexicon. In this discussion, we will delve into the implications of our findings and the implications they have for future research in this domain.
+
+First and foremost, the high agreement between CARE's predicted labels and the annotations provided by AMT annotators is promising. With an average Fleiss' kappa score of 0.59, indicating moderate agreement, it is evident that CAREdb is effective in capturing the affective responses expressed in social media posts. This suggests that CARE patterns and the CARE lexicon are valuable resources for automated affective response annotation. The ability to annotate large volumes of data using CARE patterns without the need for human-annotated data is a significant advantage, as it saves time and resources while maintaining a satisfactory level of agreement with human judgments.
+
+However, our error analysis revealed variations in CARE's accuracy across different affective response classes. In particular, the classes "amused" and "excited" exhibited lower accuracy compared to others. The non-trivial overlap among these classes, as well as "approving," raises the need for further investigation into the patterns and indicators that contribute to misclassifications. By fine-tuning the pattern and keyword combinations or implementing class-specific thresholds, it is possible to enhance CARE's performance and address these discrepancies. This highlights the importance of continuous refinement and optimization of the CARE methodology to improve its accuracy across all affective response classes.
+
+Another interesting aspect of our study is the comparison between CARE and the GoEmotions classifier. While the GoEmotions classifier is a SOTA model specifically designed for predicting publisher affect in Reddit comments, CARE outperformed it in terms of annotator agreement. This finding underscores the strengths of CARE patterns and the lexicon, which offer higher precision and do not require human-annotated data. The decreased performance of CAREG, the modified version of CARE that incorporates the GoEmotions classifier, can be attributed to the lower F1-scores of the classifier for several affective response classes. This suggests that the fine-grained annotations provided by CARE patterns and the lexicon are more reliable and accurate in capturing the nuances of affective responses in social media posts.
+
+Moving forward, further research can explore the possibility of leveraging multiple emotion detection approaches to enhance the accuracy of affective response annotation. The use of ensembling strategies, where multiple classifiers or models are combined, may help achieve even higher agreement rates and improve the overall performance of automated affective response annotation. Additionally, investigating alternative methods for pattern and keyword selection, as well as incorporating domain-specific knowledge, could contribute to refining the CARE methodology and enhancing its performance across different affective response classes.
+
+Despite the strengths and promising results of CAREdb, there are limitations that should be acknowledged. The dataset used in our experiments was derived from Reddit posts and comments from a specific time period, which may limit the generalizability of the findings to other social media platforms or different time frames. Moreover, the use of AMT annotators, while providing valuable human judgments, introduces potential biases and subjectivity. Future research could address these limitations by expanding the dataset to include a wider range of social media platforms and employing additional evaluation methods to ensure the robustness and reliability of the annotations.
+
+\section{Conclusion}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Coclusion NLP.png}
+    \caption{The F1-score of each model using varying
+training set sizes of the ISEAR dataset. The light blue
+line refers to using CARE-BERT, but with freezing all
+parameters except in the last layer. The dark blue is the
+same but without freezing. Lastly, the purple line refers
+to the same architecture as CARE-BERT (no freezing) but
+trained on GoEmotions instead of CAREdb, and the red
+line is trained only on the ISEAR dataset using a bertbase-uncased model with the same hyperparameters}
+    \label{fig:6}
+\end{figure}
+In conclusion, the proposed method of CARE (Common Affective Responses Extractor) offers a powerful and efficient approach for extracting training data to predict the affective responses of social media posts. The use of CARE patterns and the creation of CAREdb, a large annotated dataset, demonstrate the effectiveness and scalability of this methodology. The competitive performance of CARE-BERT in emotion detection further reinforces the value of CARE in this domain.
+
+The release of annotations and models associated with CAREdb provides a valuable resource for future research and encourages the exploration of new avenues in affective response detection and related tasks. By making these resources openly available, we hope to foster collaboration and unlock new possibilities in this field.
+
+While CARE has shown considerable success, there are still areas for improvement. Addressing cases where common phrases indicative of affect are lacking and dealing with indicators mapping to multiple affects present opportunities for further refinement. The partial information available in such cases can still contribute to the overall accuracy of affective response prediction.
+
+In addition to these improvements, future work can explore the inclusion of additional linguistic features such as emojis, negations, and punctuation, which may enhance the performance of CARE even further. Expanding the methodology to include new affective response classes and considering alternative approaches, such as embedding similarity instead of exact match for CARE patterns, could also yield valuable insights.
+
+Furthermore, extending CARE's applicability to predict the affective response to images and multi-modal content, such as memes, represents an exciting direction for future research. The ability to analyze affective responses in diverse types of media opens up new possibilities for understanding and interpreting emotions in online communication.
+
+In conclusion, CARE provides a robust framework for collecting unsupervised labels, creating a large dataset (CAREdb), and achieving competitive performance in affective response detection. The potential for further improvements and expansions, along with the open release of annotations and models, position CARE as a valuable tool for advancing research in affective computing, sentiment analysis, and related fields
+
+
+\section*{References}
+
+[1] V. K. Jain, S. Kumar, and S. L. Fernandes, "Extraction of Emotions from Multilingual Text Using Intelligent Text Processing and Computational Linguistics," J. Comput. Sci., vol. 4, pp. 332-341, 2017.
+
+[2] B. Felbo, A. Mislove, A. Søgaard, I. Rahwan, and S. Lehmann, "Using Millions of Emoji Occurrences to Learn Any-domain Representations for Detecting Sentiment, Emotion, and Sarcasm," in Conference on Empirical Methods in Natural Language Processing (EMNLP), 2017, pp. 1615-1625.
+
+[3] V. Lin, J. M. Girard, and L. P. Morency, "Context-Dependent Models for Predicting and Characterizing Facial Expressiveness," arXiv preprint arXiv:1911.03875, 2019.
+
+[4] C. Rathnayake and A. Caliandro, "Repurposing Sentiment Analysis for Social Research Scopes: An Inquiry into Emotion Expression within Affective Publics on Twitter during the Covid-19 Emergency," Diversity, Divergence, Dialogue, vol. 4, no. 2, pp. 112-132, 2021.
+
+[5] Z. Ahmad, A. Kumar, A. Ekbal, and P. Bhattacharyya, "Emotion Driven Crisis Response: A Benchmark Setup for Multilingual Emotion Analysis in Disaster Situations," in 2021 International Joint Conference on Neural Networks (IJCNN), 2021, pp. 1-8.
+
+[6] J. Dwivedi-Yu and A. Y. Halevy, ""That's So Cute!": The CARE Dataset for Affective Response Detection," arXiv preprint arXiv:2201.09842, 2022.
+
+[7] J. Jakubik, M. Vössing, D. Bär, N. Pröllochs, and S. Feuerriegel, "Online Emotions during the Storming of the U.S. Capitol: Evidence from the Social Media Network Parler," arXiv preprint arXiv:2201.12015, 2022.
+
+[8] S. K. H. Hamed, M. J. A. Aziz, and M. R. Yaakub, "Fake News Detection Model on Social Media by Leveraging Sentiment Analysis of News Content and Emotion Analysis of Users' Comments," Sensors (Basel, Switzerland), vol. 23, no. 2, p. 457, 2023.
+
+[9] I. Triantafyllopoulos, G. Paraskevopoulos, and A. Potamianos, "Depression Detection in Social Media Posts Using Affective and Social Norm Features," arXiv preprint arXiv:2302.01785, 2023.
+
+[10] I. Triantafyllopoulos, G. Paraskevopoulos, and A. Potamianos, "Depression Detection in Social Media Posts Using Affective and Social Norm Features," arXiv preprint arXiv:2302.01785, 2023
+
+
+\end{document}
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+
+\title{Your Title Here}
+\author{\IEEEauthorblockN{Author 1, Author 2, Author 3}
+\IEEEauthorblockA{Department of XYZ, University of ABC\\
+City, Country\\
+Email: author@example.com}}
+\maketitle
+
+\begin{abstract}
+Write your abstract here. It should provide a brief overview of your research topic, objectives, methodology, results, and conclusion.
+\end{abstract}
+
+\section{Introduction}
+Provide an introduction to your research topic, including background information and motivation for the study.
+
+\section{Literature Review}
+Summarize the relevant literature on the topic, including key concepts, theories, and previous research findings.
+
+\section{Methodology}
+Describe your research methodology, including research design, data collection, and data analysis procedures.
+
+\section{Results}
+Present your research findings, including any statistical analyses, visualizations, or other relevant results.
+
+\section{Discussion}
+Interpret your research findings and discuss their implications, limitations, and potential future research directions.
+
+\section{Conclusion}
+Provide a summary of your research findings and their significance. Also, highlight any contributions or recommendations for further research.
+
+\section*{Acknowledgment}
+Acknowledge any funding, support, or assistance received in the research.
+
+\begin{thebibliography}{}
+\bibitem{reference1}
+Author 1, Author 2, and Author 3, "Title of the Paper," Name of Journal or Conference, vol. X, no. Y, pp. Z1-Z2, Year.
+
+\bibitem{reference2}
+Author 4 and Author 5, "Title of the Book," Publisher, Year.
+
+\end{thebibliography}
+
+\end{document}
